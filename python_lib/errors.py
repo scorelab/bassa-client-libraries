@@ -1,3 +1,7 @@
+class Error(Exception):
+    """Base class for exceptions in this module."""
+    pass
+
 class InvalidUrl(Error):
     """Raised for an invalid server URL"""
     pass

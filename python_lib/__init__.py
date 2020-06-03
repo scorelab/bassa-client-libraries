@@ -10,25 +10,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""Error classes for commonly found errors."""
-
-
-class Error(Exception):
-    """Base class for exceptions in this module."""
-    pass
-
-
-class InvalidUrl(Error):
-    """Raised for an invalid server URL"""
-    pass
-
-
-class IncompleteParams(Error):
-    """Raised for an incomplete inputs"""
-    pass
-
-
-class ResponseError(Error):
-    """Raised for an unsuccessful response from the server"""
-    pass

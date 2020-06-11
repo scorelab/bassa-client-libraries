@@ -26,3 +26,6 @@ env.bak/
 venv.bak/
 
 .vscode/
+
+# Mac OS junk
+.DS_Store

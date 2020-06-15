@@ -1,0 +1,28 @@
+version: "3"
+services:
+  api:
+    image: kmehant/bassa-test-api
+    container_name: api
+    ports:
+      - 5000:5000
+    links:
+      - db
+    volumes:
+      - downloads:/downloads
+
+  aria2c:
+    image: kmehant/aria2c-test
+    container_name: aria2c
+    ports:
+      - 6800:6800
+    volumes:
+      - downloads:/downloads
+
+  db:
+    image: kmehant/bassa-test-db
+    container_name: db
+    ports:
+      - 3306:3306
+
+volumes:
+  downloads:

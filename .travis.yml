@@ -14,7 +14,4 @@ notifications:
   webhooks: https://www.travisbuddy.com/
 
 script:
-  - docker-compose up &
-  - cd python-lib
-  - pip install -r requirements.txt
-  - python -m unittest test_bassa.py
+  - sh run_tests.sh

@@ -14,4 +14,4 @@ notifications:
   webhooks: https://www.travisbuddy.com/
 
 script:
-  - sh run_tests.sh
+  - sudo sh run_tests.sh

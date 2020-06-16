@@ -81,7 +81,8 @@ class Bassa:
                                 data=params,
                                 headers=self.headers)
         if result.status_code == 200:
-            self.headers['token'] = result.headers['token']
+            self.headers['token'] = result.headers.get('token')
+            return self.headers
         else:
             raise ResponseError('API response: {}'.format(result.status_code))
 

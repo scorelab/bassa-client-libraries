@@ -15,4 +15,4 @@ notifications:
 
 script:
   - sudo chmod -R a+rwx $TRAVIS_BUILD_DIR
-  - sh run_tests.sh
+  - bash run_tests.sh

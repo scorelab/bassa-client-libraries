@@ -20,7 +20,7 @@ from utils import TimeoutHTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
 import requests
-
+import os
 
 class Bassa:
     def __init__(self, api_url, total=1, backoff_factor=1, timeout=5):
@@ -82,7 +82,7 @@ class Bassa:
                                 headers=self.headers)
         if result.status_code == 200:
             self.headers['token'] = result.headers.get('token')
-            return self.headers
+            os.environ['HTTP_TOKEN'] = result.headers.get('token')
         else:
             raise ResponseError('API response: {}'.format(result.status_code))
 

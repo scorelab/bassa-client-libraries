@@ -13,7 +13,7 @@ function run_tests
 {
     cd ./python_lib
     pip install -r requirements.txt
-    python -m unittest test_bassa.py
+    python -m unittest test_bassa.py -vv
 }
 
 start_bassa

@@ -22,6 +22,8 @@ from requests.packages.urllib3.util.retry import Retry
 import requests
 import os
 
+import json
+
 class Bassa:
     def __init__(self, api_url, total=1, backoff_factor=1, timeout=5):
         """Initializer for a Bassa instance
@@ -82,7 +84,6 @@ class Bassa:
                                 headers=self.headers)
         if result.status_code == 200:
             self.headers['token'] = result.headers.get('token')
-            os.environ['HTTP_TOKEN'] = result.headers.get('token')
         else:
             raise ResponseError('API response: {}'.format(result.status_code))
 
@@ -329,10 +330,13 @@ class Bassa:
         endpoint = "/api/download"
         params = {}
         params['link'] = download_link
+        params = json.dumps(params)
         api_url_complete = self.api_url + endpoint
         result = self.http.post(api_url_complete,
                                 data=params,
                                 headers=self.headers)
+        if result.status_code != requests.codes.ok:
+            raise Exception("Add download was not successful")
 
     def remove_download_request(self, id=None):
         """Remove a download request
@@ -381,6 +385,8 @@ class Bassa:
         result = self.http.get(api_url_complete, headers=self.headers)
         if result.status_code == requests.codes.ok:
             return result.json()
+        else:
+            raise Exception(result.status_code)
 
     def get_download(self, id=None):
         """Get all download requests

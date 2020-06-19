@@ -23,14 +23,14 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r python-lib/requirements.txt
+          pip install -r python_lib/requirements.txt
       - name: Shutdown Default MySQL
         run: sudo service mysql stop
       - name: Start Bassa
         run: docker-compose up &
       - name: Run Tests
         run: |
-          cd python-lib
+          cd python_lib
           python -m unittest test_bassa.py -vv
       - name: Stop Bassa
         run: docker-compose down

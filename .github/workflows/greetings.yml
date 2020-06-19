@@ -1,0 +1,13 @@
+name: Greetings
+
+on: [pull_request, issues]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: 'Thank you for opening an issue on Bassa Client Library. @kmehant, @jadogg or someone else will look into it :)'
+        pr-message: 'We appreciate your pull request. @kmehant, @jadogg or someone will review it :)'

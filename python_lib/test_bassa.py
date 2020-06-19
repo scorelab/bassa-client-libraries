@@ -2,20 +2,31 @@ import unittest
 from errors import InvalidUrl, IncompleteParams, ResponseError
 from bassa import Bassa
 
+import time
+
+import logging
+import sys
+
+unittest.TestLoader.sortTestMethodsUsing = None
+
 
 class TestBassaPythonLib(unittest.TestCase):
 
     client = Bassa(api_url="http://localhost:5000")
     INVALID_URL = "hppts://localhost:5000"
     VALID_URL = "http://localhost:5000"
-    TEST_USERS = [("root", "pass", "root@scorelab.org"),
-                ("Mehant", "secretpass", "kmehant@scorelab.org"),
-                ("MehantAdmin", "secretpass", "kmehant@scorelab.org"),
-                ("Mehant2", "secretpass2", "kmehant2@scorelab.org"),
-                ("blockeduser", "blockedpass", "blockedemail@scorelab.org")]
+    TEST_USERS = [["rand", "pass", "rand@scorelab.org"],
+                  ["Mehant", "secretpass", "kmehant@scorelab.org"],
+                  ["MehantAdmin", "secretpass", "kmehant@scorelab.org"],
+                  ["Mehant2", "secretpass2", "kmehant2@scorelab.org"],
+                  ["blockeduser", "blockedpass", "blockedemail@scorelab.org"]]
     DOWNLOAD_LINK = "http://www.scorelab.org/assets/img/score.jpg"
 
-    def test_url(self):
+    def __init__(self, *args, **kwargs):
+        super(TestBassaPythonLib, self).__init__(*args, **kwargs)
+        self.test_login()
+
+    def test_invalid_url(self):
         """Test input URL"""
         self.assertRaises(InvalidUrl, Bassa, self.INVALID_URL)
 
@@ -46,7 +57,8 @@ class TestBassaPythonLib(unittest.TestCase):
     def test_get_user_signup_requests(self):
         """Test getting all user requests"""
         result = self.client.get_user_signup_requests()
-        print(result)
+        assert 'mgdmadusanka@gmail.com' in result[0]['email']
+        assert 'rush' in result[0]['user_name']
 
     def test_approve_user_request(self):
         """Test approving a user request"""
@@ -63,7 +75,7 @@ class TestBassaPythonLib(unittest.TestCase):
     def test_get_blocked_users_request(self):
         """Test getting blocked user requests"""
         result = self.client.get_blocked_users_request()
-        print(result)
+        logging.error(result)
 
     def test_unblock_user_request(self):
         """Test unblocking a user request"""
@@ -76,17 +88,16 @@ class TestBassaPythonLib(unittest.TestCase):
     def test_get_topten_heaviest_users(self):
         """Test getting top ten heaviest users"""
         result = self.client.get_topten_heaviest_users()
-        print(result)
+        logging.error(result)
 
     def test_get_downloads_request(self):
         """Test getting all download requests"""
+        self.client.add_download_request(download_link=self.DOWNLOAD_LINK)
         result = self.client.get_downloads_request(limit=1)
-        print(result)
-
-# def test_remove_download_request(self):
- # """Test removing a download request"""
- # self.client.remove_download_request()
+        logging.error(result)
 
 
 if __name__ == '__main__':
+    logging.basicConfig(stream=sys.stderr)
+    logging.getLogger("BassaPythonClientLibrary").setLevel(logging.ERROR)
     unittest.main()

@@ -11,18 +11,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Class to encapsulate complete Bassa library functions"""
+"""Class to encapsulate complete Bassa library"""
 
-
-import re
-from errors import InvalidUrl, IncompleteParams, ResponseError
-from utils import TimeoutHTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
-
-import requests
-import os
 
 import json
+import os
+import requests
+from requests.packages.urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
+import re
+from bassa.errors import InvalidUrl, Error, IncompleteParams, ResponseError
+from bassa.utils import TimeoutHTTPAdapter
+
 
 class Bassa:
     def __init__(self, api_url, total=1, backoff_factor=1, timeout=5):

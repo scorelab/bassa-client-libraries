@@ -27,7 +27,9 @@ jobs:
       - name: Shutdown Default MySQL
         run: sudo service mysql stop
       - name: Start Bassa
-        run: docker-compose up &
+        run: |
+          docker-compose up &
+          sleep 100
       - name: Run Tests
         run: |
           cd python_lib

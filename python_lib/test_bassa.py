@@ -1,6 +1,7 @@
 import unittest
-from errors import InvalidUrl, IncompleteParams, ResponseError
-from bassa import Bassa
+from bassa.bassa import Bassa
+from bassa.errors import InvalidUrl
+
 
 import time
 
@@ -75,7 +76,7 @@ class TestBassaPythonLib(unittest.TestCase):
     def test_get_blocked_users_request(self):
         """Test getting blocked user requests"""
         result = self.client.get_blocked_users_request()
-        logging.error(result)
+        logging.debug(result)
 
     def test_unblock_user_request(self):
         """Test unblocking a user request"""
@@ -88,13 +89,13 @@ class TestBassaPythonLib(unittest.TestCase):
     def test_get_topten_heaviest_users(self):
         """Test getting top ten heaviest users"""
         result = self.client.get_topten_heaviest_users()
-        logging.error(result)
+        logging.debug(result)
 
     def test_get_downloads_request(self):
         """Test getting all download requests"""
         self.client.add_download_request(download_link=self.DOWNLOAD_LINK)
         result = self.client.get_downloads_request(limit=1)
-        logging.error(result)
+        logging.debug(result)
 
 
 if __name__ == '__main__':

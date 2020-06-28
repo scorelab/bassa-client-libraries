@@ -1,5 +1,5 @@
 # Bassa Client Libraries
-![Python Library Tests](https://github.com/scorelab/BassaClient/workflows/Bassa%20Client%20Library%20Tests/badge.svg?branch=master) ![Gitter](https://img.shields.io/gitter/room/scorelab/bassa) 
+![Python Library Tests](https://github.com/scorelab/BassaClient/workflows/Bassa%20Client%20Library%20Tests/badge.svg?branch=master) ![Gitter](https://img.shields.io/gitter/room/scorelab/bassa)
 
 This repository holds client libraries for [the Bassa project](https://github.com/scorelab/bassa). Bassa is an automated download queue for better usage of internet bandwidth for communities. It uses multi-threading to download files concurrently on to a local server and peers can download those files through a local area network without an external internet bandwidth.
 

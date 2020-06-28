@@ -1,0 +1,33 @@
+name: Upload Test Python Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+      - name: Install dependencies
+        run: |
+          cd python_lib
+          make install-dep
+      - name: Run Lint
+        run: cd python_lib && make lint
+      - name: Start Bassa
+        run: cd python_lib && make start-bassa
+      - name: Run Tests
+        run: cd python_lib && make test
+      - name: Stop Bassa
+        run: cd python_lib && make stop-bassa
+      - name: Build and publish
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: cd python_lib && make test-publish

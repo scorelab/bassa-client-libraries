@@ -27,10 +27,10 @@ jobs:
       - name: Shutdown Default MySQL
         run: sudo service mysql stop
       - name: Start Bassa
-        run: make start-bassa
+        run: cd python_lib && make start-bassa
       - name: Run Lint
-        run: make lint
+        run: cd python_lib && make lint
       - name: Run Tests
-        run: make test
+        run: cd python_lib && make test
       - name: Stop Bassa
-        run: stop-bassa
+        run: cd python_lib && stop-bassa

@@ -22,17 +22,15 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install Python Dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r python_lib/requirements.txt
+          cd python_lib
+          make install-dep
       - name: Shutdown Default MySQL
         run: sudo service mysql stop
       - name: Start Bassa
-        run: |
-          docker-compose up &
-          sleep 100
+        run: make start-bassa
+      - name: Run Lint
+        run: make lint
       - name: Run Tests
-        run: |
-          cd python_lib
-          python -m unittest test_bassa.py -vv
+        run: make test
       - name: Stop Bassa
-        run: docker-compose down
+        run: stop-bassa

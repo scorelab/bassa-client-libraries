@@ -33,4 +33,4 @@ jobs:
       - name: Run Tests
         run: cd python_lib && make test
       - name: Stop Bassa
-        run: cd python_lib && stop-bassa
+        run: cd python_lib && make stop-bassa

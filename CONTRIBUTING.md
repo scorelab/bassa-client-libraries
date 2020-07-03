@@ -15,7 +15,7 @@ Please note we have a code of conduct, please follow it in all your interactions
    Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
 4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you 
    do not have permission to do that, you may request the second reviewer to merge it for you.
-5. **Please make sure that you create new pull request to the develop branch, instead of master branch**
+5. Please make sure to squash your commits to one, that means a pull request shall hold only one commit
 
 ## Code of Conduct
 

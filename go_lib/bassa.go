@@ -655,3 +655,84 @@ func (b *Bassa) GetDownloadRequest(id int) string {
 	fmt.Println(string(out))
 	return string(out)
 }
+
+// StartCompression : Function to start compression of files
+func (b *Bassa) StartCompression(gidList []string) {
+	if len(gidList) == 0 {
+		panic(errIncompleteParams)
+	}
+	endpoint := "/api/compress"
+	apiURL := b.apiURL + endpoint
+	requestBody, err := json.Marshal(map[string][]string{
+		"gid": gidList})
+	request, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(requestBody))
+	if err != nil {
+		panic(err)
+	}
+	request.Header.Set("token", b.token)
+	response, err := b.httpClient.Do(request)
+	if err != nil {
+		panic(err)
+	}
+
+	defer response.Body.Close()
+	var r interface{}
+	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
+		panic(err)
+	}
+	out, err := prettyjson.Marshal(r)
+	fmt.Println(string(out))
+}
+
+// GetCompressionProgress : Function to get compression progress
+func (b *Bassa) GetCompressionProgress(id int) string {
+
+	endpoint := "/api/compression-progress"
+	apiURL := b.apiURL + endpoint + "/" + string(id)
+
+	request, err := http.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		panic(err)
+	}
+	request.Header.Set("token", b.token)
+	response, err := b.httpClient.Do(request)
+	if err != nil {
+		panic(err)
+	}
+
+	defer response.Body.Close()
+	var r interface{}
+	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
+		panic(err)
+	}
+	out, err := prettyjson.Marshal(r)
+	fmt.Println(string(out))
+	return string(out)
+}
+
+// SendFileFromPath : Function to send file from the local server
+func (b *Bassa) SendFileFromPath(id int) string {
+
+	endpoint := "/api/file"
+	apiURL := b.apiURL + endpoint
+	requestBody, err := json.Marshal(map[string]int{
+		"gid": id})
+	request, err := http.NewRequest("GET", apiURL, bytes.NewBuffer(requestBody))
+	if err != nil {
+		panic(err)
+	}
+	request.Header.Set("token", b.token)
+	response, err := b.httpClient.Do(request)
+	if err != nil {
+		panic(err)
+	}
+
+	defer response.Body.Close()
+	var r interface{}
+	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
+		panic(err)
+	}
+	out, err := prettyjson.Marshal(r)
+	fmt.Println(string(out))
+	return string(out)
+}

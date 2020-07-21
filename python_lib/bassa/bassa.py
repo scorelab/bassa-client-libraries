@@ -221,7 +221,7 @@ class Bassa:
         if user_name is None:
             raise IncompleteParams
 
-            result = self.http.post(api_url_complete, headers=self.headers)
+        result = self.http.post(api_url_complete, headers=self.headers)
 
     def get_blocked_users_request(self):
         """Get all blocked user requests 

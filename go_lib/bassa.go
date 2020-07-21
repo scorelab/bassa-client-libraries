@@ -452,3 +452,206 @@ func (b *Bassa) GetToptenHeaviestUsers() string {
 	fmt.Println(string(out))
 	return string(out)
 }
+
+// StartDownload : Function to start download
+func (b *Bassa) StartDownload(serverKey string) string {
+	if serverKey == "" {
+		serverKey = "123456789"
+		fmt.Println("Server Key not given, continuing with: ", serverKey)
+	}
+	endpoint := "/api/download/start"
+	apiURL := b.apiURL + endpoint
+
+	request, err := http.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		panic(err)
+	}
+	request.Header.Set("token", b.token)
+	request.Header.Set("key", serverKey)
+	response, err := b.httpClient.Do(request)
+	if err != nil {
+		panic(err)
+	}
+
+	defer response.Body.Close()
+	var r interface{}
+	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
+		panic(err)
+	}
+	out, err := prettyjson.Marshal(r)
+	fmt.Println(string(out))
+	return string(out)
+}
+
+// KillDownload : Function to kill download
+func (b *Bassa) KillDownload(serverKey string) string {
+	if serverKey == "" {
+		serverKey = "123456789"
+		fmt.Println("Server Key not given, continuing with: ", serverKey)
+	}
+	endpoint := "/api/download/kill"
+	apiURL := b.apiURL + endpoint
+
+	request, err := http.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		panic(err)
+	}
+	request.Header.Set("token", b.token)
+	request.Header.Set("key", serverKey)
+	response, err := b.httpClient.Do(request)
+	if err != nil {
+		panic(err)
+	}
+
+	defer response.Body.Close()
+	var r interface{}
+	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
+		panic(err)
+	}
+	out, err := prettyjson.Marshal(r)
+	fmt.Println(string(out))
+	return string(out)
+}
+
+// AddDownloadRequest : Function to add download request
+func (b *Bassa) AddDownloadRequest(downloadLink string) {
+	if downloadLink == "" {
+		panic(errIncompleteParams)
+	}
+
+	endpoint := "/api/download"
+	apiURL := b.apiURL + endpoint
+
+	requestBody, err := json.Marshal(map[string]string{
+		"link": downloadLink})
+	if err != nil {
+		panic(err)
+	}
+	request, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(requestBody))
+	if err != nil {
+		panic(err)
+	}
+	request.Header.Set("token", b.token)
+	response, err := b.httpClient.Do(request)
+	if err != nil {
+		panic(err)
+	}
+
+	defer response.Body.Close()
+
+	var r interface{}
+	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
+		panic(err)
+	}
+	out, err := prettyjson.Marshal(r)
+	fmt.Println(string(out))
+}
+
+// RemoveDownloadRequest : Function to remove download request
+func (b *Bassa) RemoveDownloadRequest(id int) {
+
+	endpoint := "/api/download"
+	apiURL := b.apiURL + endpoint + string(id)
+
+	request, err := http.NewRequest("DELETE", apiURL, nil)
+	if err != nil {
+		panic(err)
+	}
+	request.Header.Set("token", b.token)
+	response, err := b.httpClient.Do(request)
+	if err != nil {
+		panic(err)
+	}
+
+	defer response.Body.Close()
+
+	var r interface{}
+	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
+		panic(err)
+	}
+	out, err := prettyjson.Marshal(r)
+	fmt.Println(string(out))
+}
+
+// RateDownloadRequest : Function to rate a download request
+func (b *Bassa) RateDownloadRequest(id int, rate int) {
+	if rate == 0 {
+		fmt.Println("Continuing with 0 rating")
+	}
+	endpoint := "/api/download"
+	apiURL := b.apiURL + endpoint + string(id)
+	requestBody, err := json.Marshal(map[string]int{
+		"rate": rate})
+	request, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(requestBody))
+	if err != nil {
+		panic(err)
+	}
+	request.Header.Set("token", b.token)
+	response, err := b.httpClient.Do(request)
+	if err != nil {
+		panic(err)
+	}
+
+	defer response.Body.Close()
+
+	var r interface{}
+	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
+		panic(err)
+	}
+	out, err := prettyjson.Marshal(r)
+	fmt.Println(string(out))
+}
+
+// GetDownloadRequests : Function to get all download requests
+func (b *Bassa) GetDownloadRequests(limit int) string {
+	if limit == 0 {
+		panic(errIncompleteParams)
+	}
+	endpoint := "/api/downloads"
+	apiURL := b.apiURL + endpoint + "/" + string(limit)
+
+	request, err := http.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		panic(err)
+	}
+	request.Header.Set("token", b.token)
+	response, err := b.httpClient.Do(request)
+	if err != nil {
+		panic(err)
+	}
+
+	defer response.Body.Close()
+	var r interface{}
+	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
+		panic(err)
+	}
+	out, err := prettyjson.Marshal(r)
+	fmt.Println(string(out))
+	return string(out)
+}
+
+// GetDownloadRequest : Function to get a download request
+func (b *Bassa) GetDownloadRequest(id int) string {
+
+	endpoint := "/api/download"
+	apiURL := b.apiURL + endpoint + "/" + string(id)
+
+	request, err := http.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		panic(err)
+	}
+	request.Header.Set("token", b.token)
+	response, err := b.httpClient.Do(request)
+	if err != nil {
+		panic(err)
+	}
+
+	defer response.Body.Close()
+	var r interface{}
+	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
+		panic(err)
+	}
+	out, err := prettyjson.Marshal(r)
+	fmt.Println(string(out))
+	return string(out)
+}

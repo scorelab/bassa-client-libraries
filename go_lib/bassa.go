@@ -27,7 +27,10 @@ import (
 	"github.com/gojektech/heimdall"
 	"github.com/gojektech/heimdall/httpclient"
 	"github.com/hokaccha/go-prettyjson"
+
+	logger "./utils/"
 )
+
 
 // Bassa : Bassa Go object
 type Bassa struct {
@@ -41,7 +44,7 @@ type Bassa struct {
 var (
 	errBadFormat        = errors.New("invalid format")
 	errIncompleteParams = errors.New("Some fields are not valid or empty")
-	emailRegexp         = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+	emailRegex	p.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 )
 
 // validateFormat : Helper function to validate email address
@@ -59,8 +62,8 @@ func (b *Bassa) Init(apiURL string, timeout int, retryCount int) {
 	}
 	u, err := url.Parse(apiURL)
 	if err != nil {
-		fmt.Println(u)
-		panic(err)
+		logger.InfoLogger.Println(u)
+		logger.ErrorLogger.Panic(err)
 	} else {
 		b.apiURL = apiURL
 		b.timeout = timeout
@@ -90,15 +93,15 @@ func (b *Bassa) Login(userName string, password string) {
 
 	response, err := http.PostForm(apiURL, form)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	defer response.Body.Close()
 	b.token = response.Header["Token"][0]
 
 	respBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		fmt.Println(string(respBody))
-		panic(err)
+		logger.InfoLogger.Println(string(respBody))
+		logger.ErrorLogger.Panic(err)
 	}
 }
 
@@ -110,7 +113,7 @@ func (b *Bassa) AddRegularUserRequest(userName string, password string, email st
 
 	err := validateFormat(email)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	endpoint := "/api/regularuser"
@@ -121,24 +124,24 @@ func (b *Bassa) AddRegularUserRequest(userName string, password string, email st
 		"password":  password,
 		"email":     email})
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(requestBody))
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 
 	respBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		fmt.Println(string(respBody))
-		panic(err)
+		logger.InfoLogger.Println(string(respBody))
+		logger.ErrorLogger.Panic(err)
 	}
 }
 
@@ -150,7 +153,7 @@ func (b *Bassa) AddUserRequest(userName string, password string, email string, a
 
 	err := validateFormat(email)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	endpoint := "/api/user"
@@ -160,21 +163,21 @@ func (b *Bassa) AddUserRequest(userName string, password string, email string, a
 
 	request, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(requestBody))
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 }
 
 // RemoveUserRequest : Function to remove user
@@ -188,18 +191,18 @@ func (b *Bassa) RemoveUserRequest(userName string) string {
 
 	request, err := http.NewRequest("DELETE", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
 	return string(out)
@@ -213,7 +216,7 @@ func (b *Bassa) UpdateUserRequest(userName string, newUserName string, password 
 
 	err := validateFormat(email)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	endpoint := "/api/user"
@@ -223,21 +226,21 @@ func (b *Bassa) UpdateUserRequest(userName string, newUserName string, password 
 
 	request, err := http.NewRequest("PUT", apiURL, bytes.NewBuffer(requestBody))
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 }
 
 // GetUserRequest : Function to get user request
@@ -248,21 +251,21 @@ func (b *Bassa) GetUserRequest() string {
 
 	request, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
 
@@ -274,21 +277,21 @@ func (b *Bassa) GetUserSignupRequests() string {
 
 	request, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
 
@@ -302,21 +305,21 @@ func (b *Bassa) ApproveUserRequest(userName string) {
 
 	request, err := http.NewRequest("POST", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 }
 
 // GetBlockedUserRequests : Function to get blocked user requests
@@ -327,21 +330,21 @@ func (b *Bassa) GetBlockedUserRequests() string {
 
 	request, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
 
@@ -355,21 +358,21 @@ func (b *Bassa) BlockUserRequest(userName string) {
 
 	request, err := http.NewRequest("POST", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 }
 
 // UnBlockUserRequest : Function to unblock user request
@@ -382,21 +385,21 @@ func (b *Bassa) UnBlockUserRequest(userName string) {
 
 	request, err := http.NewRequest("DELETE", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 }
 
 // GetDownloadUserRequests : Function to get download user requests
@@ -409,21 +412,21 @@ func (b *Bassa) GetDownloadUserRequests(limit int) string {
 
 	request, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
 
@@ -435,21 +438,21 @@ func (b *Bassa) GetToptenHeaviestUsers() string {
 
 	request, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
 
@@ -457,29 +460,29 @@ func (b *Bassa) GetToptenHeaviestUsers() string {
 func (b *Bassa) StartDownload(serverKey string) string {
 	if serverKey == "" {
 		serverKey = "123456789"
-		fmt.Println("Server Key not given, continuing with: ", serverKey)
+		logger.InfoLogger.Println("Server Key not given, continuing with: ", serverKey)
 	}
 	endpoint := "/api/download/start"
 	apiURL := b.apiURL + endpoint
 
 	request, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	request.Header.Set("key", serverKey)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
 
@@ -487,29 +490,29 @@ func (b *Bassa) StartDownload(serverKey string) string {
 func (b *Bassa) KillDownload(serverKey string) string {
 	if serverKey == "" {
 		serverKey = "123456789"
-		fmt.Println("Server Key not given, continuing with: ", serverKey)
+		logger.InfoLogger.Println("Server Key not given, continuing with: ", serverKey)
 	}
 	endpoint := "/api/download/kill"
 	apiURL := b.apiURL + endpoint
 
 	request, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	request.Header.Set("key", serverKey)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
 
@@ -525,26 +528,26 @@ func (b *Bassa) AddDownloadRequest(downloadLink string) {
 	requestBody, err := json.Marshal(map[string]string{
 		"link": downloadLink})
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(requestBody))
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 }
 
 // RemoveDownloadRequest : Function to remove download request
@@ -555,28 +558,28 @@ func (b *Bassa) RemoveDownloadRequest(id int) {
 
 	request, err := http.NewRequest("DELETE", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 }
 
 // RateDownloadRequest : Function to rate a download request
 func (b *Bassa) RateDownloadRequest(id int, rate int) {
 	if rate == 0 {
-		fmt.Println("Continuing with 0 rating")
+		logger.InfoLogger.Println("Continuing with 0 rating")
 	}
 	endpoint := "/api/download"
 	apiURL := b.apiURL + endpoint + string(id)
@@ -584,22 +587,22 @@ func (b *Bassa) RateDownloadRequest(id int, rate int) {
 		"rate": rate})
 	request, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(requestBody))
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 }
 
 // GetDownloadRequests : Function to get all download requests
@@ -612,21 +615,21 @@ func (b *Bassa) GetDownloadRequests(limit int) string {
 
 	request, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
 
@@ -638,21 +641,21 @@ func (b *Bassa) GetDownloadRequest(id int) string {
 
 	request, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
 
@@ -667,21 +670,21 @@ func (b *Bassa) StartCompression(gidList []string) {
 		"gid": gidList})
 	request, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(requestBody))
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 }
 
 // GetCompressionProgress : Function to get compression progress
@@ -692,21 +695,21 @@ func (b *Bassa) GetCompressionProgress(id int) string {
 
 	request, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
 
@@ -719,20 +722,20 @@ func (b *Bassa) SendFileFromPath(id int) string {
 		"gid": id})
 	request, err := http.NewRequest("GET", apiURL, bytes.NewBuffer(requestBody))
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	request.Header.Set("token", b.token)
 	response, err := b.httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 
 	defer response.Body.Close()
 	var r interface{}
 	if err := json.NewDecoder(response.Body).Decode(&r); err != nil {
-		panic(err)
+		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
-	fmt.Println(string(out))
+	logger.InfoLogger.Println(string(out))
 	return string(out)
 }

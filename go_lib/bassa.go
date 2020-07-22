@@ -105,7 +105,7 @@ func (b *Bassa) Login(userName string, password string) {
 	}
 }
 
-// AddRegularUserRequest : Function to login as a user
+// AddRegularUserRequest : Function add a regular user request
 func (b *Bassa) AddRegularUserRequest(userName string, password string, email string) {
 	if userName == "" || password == "" || email == "" {
 		panic(errIncompleteParams)
@@ -145,7 +145,7 @@ func (b *Bassa) AddRegularUserRequest(userName string, password string, email st
 	}
 }
 
-// AddUserRequest : Function to login as a user
+// AddUserRequest : Function to add a user request
 func (b *Bassa) AddUserRequest(userName string, password string, email string, authLevel int) {
 	if userName == "" || password == "" || email == "" {
 		panic(errIncompleteParams)

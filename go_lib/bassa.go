@@ -31,7 +31,6 @@ import (
 	logger "./utils"
 )
 
-
 // Bassa : Bassa Go object
 type Bassa struct {
 	apiURL     string
@@ -44,12 +43,12 @@ type Bassa struct {
 var (
 	errBadFormat        = errors.New("invalid format")
 	errIncompleteParams = errors.New("Some fields are not valid or empty")
-	emailRegex	p.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 )
 
 // validateFormat : Helper function to validate email address
 func validateFormat(email string) error {
-	if !emailRegexp.MatchString(email) {
+	re := regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+	if !re.MatchString(email) {
 		return errBadFormat
 	}
 	return nil
@@ -185,7 +184,7 @@ func (b *Bassa) AddUserRequest(userName string, password string, email string, a
 }
 
 // RemoveUserRequest : Function to remove user
-func (b *Bassa) RemoveUserRequest(userName string) string {
+func (b *Bassa) RemoveUserRequest(userName string) {
 	if userName == "" {
 		panic(errIncompleteParams)
 	}
@@ -213,7 +212,6 @@ func (b *Bassa) RemoveUserRequest(userName string) string {
 		logger.InfoLogger.Println(out)
 		logger.ErrorLogger.Panic(err)
 	}
-	return string(out)
 }
 
 // UpdateUserRequest : Function to update user request

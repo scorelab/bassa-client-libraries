@@ -28,7 +28,7 @@ import (
 	"github.com/gojektech/heimdall/httpclient"
 	"github.com/hokaccha/go-prettyjson"
 
-	logger "./utils/"
+	logger "./utils"
 )
 
 
@@ -177,6 +177,10 @@ func (b *Bassa) AddUserRequest(userName string, password string, email string, a
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 }
 
@@ -205,6 +209,10 @@ func (b *Bassa) RemoveUserRequest(userName string) string {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	return string(out)
 }
 
@@ -240,6 +248,10 @@ func (b *Bassa) UpdateUserRequest(userName string, newUserName string, password 
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 }
 
@@ -265,6 +277,10 @@ func (b *Bassa) GetUserRequest() string {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
@@ -291,6 +307,10 @@ func (b *Bassa) GetUserSignupRequests() string {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
@@ -319,6 +339,10 @@ func (b *Bassa) ApproveUserRequest(userName string) {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 }
 
@@ -344,6 +368,10 @@ func (b *Bassa) GetBlockedUserRequests() string {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
@@ -372,6 +400,10 @@ func (b *Bassa) BlockUserRequest(userName string) {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 }
 
@@ -399,6 +431,10 @@ func (b *Bassa) UnBlockUserRequest(userName string) {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 }
 
@@ -426,6 +462,10 @@ func (b *Bassa) GetDownloadUserRequests(limit int) string {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
@@ -452,6 +492,10 @@ func (b *Bassa) GetToptenHeaviestUsers() string {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
@@ -482,6 +526,10 @@ func (b *Bassa) StartDownload(serverKey string) string {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
@@ -512,6 +560,10 @@ func (b *Bassa) KillDownload(serverKey string) string {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
@@ -547,6 +599,10 @@ func (b *Bassa) AddDownloadRequest(downloadLink string) {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 }
 
@@ -573,6 +629,10 @@ func (b *Bassa) RemoveDownloadRequest(id int) {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 }
 
@@ -602,6 +662,10 @@ func (b *Bassa) RateDownloadRequest(id int, rate int) {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 }
 
@@ -629,6 +693,10 @@ func (b *Bassa) GetDownloadRequests(limit int) string {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
@@ -655,6 +723,10 @@ func (b *Bassa) GetDownloadRequest(id int) string {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
@@ -684,6 +756,10 @@ func (b *Bassa) StartCompression(gidList []string) {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 }
 
@@ -709,6 +785,10 @@ func (b *Bassa) GetCompressionProgress(id int) string {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 	return string(out)
 }
@@ -736,6 +816,10 @@ func (b *Bassa) SendFileFromPath(id int) string {
 		logger.ErrorLogger.Panic(err)
 	}
 	out, err := prettyjson.Marshal(r)
+	if err != nil {
+		logger.InfoLogger.Println(out)
+		logger.ErrorLogger.Panic(err)
+	}
 	logger.InfoLogger.Println(string(out))
 	return string(out)
 }

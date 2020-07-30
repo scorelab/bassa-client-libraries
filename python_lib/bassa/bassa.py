@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Class to encapsulate complete Bassa library"""
+"""Bassa python client library will enable you to interact easily with Bassa API server with most of its functions covered. """
 
 
 import json
@@ -25,17 +25,20 @@ from bassa.utils import TimeoutHTTPAdapter
 
 
 class Bassa:
+    """Class to encapsulate complete Bassa functions
+
+    Args:
+        total (int): total number of tries for each request
+        backoff_factor (int): It is used to determine the delay between each retry
+        follows this formulation {backoff factor} * (2 ** ({number of total retries} - 1))
+        timeout (int): duration in seconds to wait until cancellation
+        api_url (str): URL to the Bassa Server
+
+
+    Returns:
+        None
+    """
     def __init__(self, api_url, total=1, backoff_factor=1, timeout=5):
-        """Initializer for a Bassa instance
-        Args:
-            total (int):    total number of tries for each request
-            backoff_factor (int):   It is used to determine the delay between each retry
-            follows this formulation {backoff factor} * (2 ** ({number of total retries} - 1))
-            timeout (int):  duration in seconds to wait until cancellation
-            api_url (str):  URL to the Bassa Server
-        Returns:
-            None
-        """
         retries = Retry(total=total,
                         backoff_factor=backoff_factor,
                         status_forcelist=[429, 500, 502, 503, 504])
@@ -65,10 +68,14 @@ class Bassa:
     # User functions
 
     def login(self, user_name=None, password=None):
-        """Login to the Bassa Server
+        """Login to the Bassa Server.
+
+
         Args:
-            user_name (str):    Name of the user
-            password (str):   Password of the user
+            user_name (str): Name of the user
+            password (str): Password of the user
+
+
         Returns:
             None
         """
@@ -91,12 +98,16 @@ class Bassa:
                                  user_name=None,
                                  password=None,
                                  email=None):
-        """Add user requests with auth level 1
+        """Add user requests with auth level 1.
+
+
         Args:
-            user_name (str):    Name of the user
-            password (str):   Password of the user
+            user_name (str): Name of the user
+            password (str): Password of the user
             email (str): Email ID of the user
-         Returns:
+
+
+        Returns:
             None
         """
         endpoint = "/api/regularuser"
@@ -118,12 +129,15 @@ class Bassa:
                          email=None,
                          auth_level=1):
         """Add user requests with auth level 1 or 0
+
+
         Args:
             user_name (str):    Name of the user
             password (str):   Password of the user
             email (str): Email ID of the user
             auth_level (int): Auth level of the user, 0 for admins and 1 for regular users
-         Returns:
+
+        Returns:
             None
         """
         endpoint = "/api/user"
@@ -142,9 +156,11 @@ class Bassa:
 
     def remove_user_request(self, user_name=None):
         """Remove a user request
+
         Args:
             user_name (str):    Name of the user
-         Returns:
+
+        Returns:
             None
         """
         if user_name is None:
@@ -161,13 +177,15 @@ class Bassa:
                             auth_level=None,
                             email=None):
         """Update a user request
+
         Args:
             user_name (str):    Name of the user to updated
             new_user_name (str): New name for the user
             password (str): New password for the user
             auth_level (int): Auth level for the new user, 0 for admins and 1 for regular users
             email (str): Email ID for the new user
-         Returns:
+
+        Returns:
             None
         """
         if user_name is None or new_user_name is None or password is None or auth_level is None or email is None:
@@ -186,7 +204,9 @@ class Bassa:
 
     def get_user_request(self):
         """Get a user request
-         Returns:
+
+
+        Returns:
             response as json
         """
         endpoint = "/api/user"
@@ -198,8 +218,9 @@ class Bassa:
 
     def get_user_signup_requests(self):
         """Get all user requests
-        Args:
-         Returns:
+
+
+        Returns:
             response as json
         """
         endpoint = "/api/user/requests"
@@ -211,9 +232,11 @@ class Bassa:
 
     def approve_user_request(self, user_name=None):
         """Approve a user request
+
         Args:
             user_name (str): Name of the user
-         Returns:
+
+        Returns:
             None
         """
         endpoint = "/api/user/approve"
@@ -225,8 +248,10 @@ class Bassa:
 
     def get_blocked_users_request(self):
         """Get all blocked user requests 
+
         Args:
-         Returns:
+
+        Returns:
             response as json
         """
         endpoint = "/api/user/blocked"
@@ -238,9 +263,11 @@ class Bassa:
 
     def block_user_request(self, user_name=None):
         """Block a user request
+
         Args:
             user_name (str): Name of the user
-         Returns:
+
+        Returns:
             None
         """
         endpoint = "/api/user/blocked"
@@ -251,9 +278,11 @@ class Bassa:
 
     def unblock_user_request(self, user_name=None):
         """Unblock a user request
+
         Args:
             user_name (str): Name of the user
-         Returns:
+
+        Returns:
             None
         """
         endpoint = "/api/user/blocked"
@@ -264,9 +293,11 @@ class Bassa:
 
     def get_downloads_user_request(self, limit=1):
         """Get downloads user request
+
         Args:
             limit (int): Number of records to return. limit 1 = 25 records
-         Returns:
+
+        Returns:
             response as json
         """
         endpoint = "/api/user/downloads"
@@ -278,8 +309,10 @@ class Bassa:
 
     def get_topten_heaviest_users(self):
         """Get top ten user usage
+
         Args:
-         Returns:
+
+        Returns:
             response as json
         """
         endpoint = "/api/user/heavy"
@@ -292,8 +325,10 @@ class Bassa:
 
     def start_download(self, server_key="123456789"):
         """Start downloading files which have been queued
+
         Args:
              server_key (str): secret server key which you would set in the Bassa Server
+
         Returns:
             None
         """
@@ -306,8 +341,10 @@ class Bassa:
 
     def kill_download(self, server_key="123456789"):
         """Kill all downloading files 
+
         Args:
              server_key (str): secret server key which you would set in the Bassa Server
+
         Returns:
             None
         """
@@ -320,9 +357,11 @@ class Bassa:
 
     def add_download_request(self, download_link=None):
         """Add a download request
+
         Args:
             download_link (str): Link to the download the resource
-         Returns:
+
+        Returns:
             None
         """
         if download_link is None:
@@ -340,9 +379,11 @@ class Bassa:
 
     def remove_download_request(self, id=None):
         """Remove a download request
+
         Args:
             id (int): id of the download request 
-         Returns:
+
+        Returns:
             None
         """
         if id is None:
@@ -353,10 +394,12 @@ class Bassa:
 
     def rate_download_request(self, id=None, rate=None):
         """Rate a download request
+
         Args:
             id (int): id of the download request
             rate (int): rating for the download request
-         Returns:
+
+        Returns:
             None
         """
         if id is None or rate is None:
@@ -372,9 +415,11 @@ class Bassa:
 
     def get_downloads_request(self, limit=None):
         """Get all download requests
+
         Args:
             limit (int): Number of records to return. limit 1 = 25 records
-         Returns:
+
+        Returns:
             returns response as json
         """
         if limit is None:
@@ -390,9 +435,11 @@ class Bassa:
 
     def get_download(self, id=None):
         """Get all download requests
+
         Args:
             id (int): id of the download
-         Returns:
+
+        Returns:
             returns response as json
         """
         if id is None:
@@ -407,9 +454,11 @@ class Bassa:
 
     def start_compression(self, gid_list=None):
         """Start compression of the given files
+
         Args:
             gid_list (List): list of file identifiers to compress
-         Returns:
+
+        Returns:
             returns response
         """
         if gid_list is None:
@@ -424,9 +473,11 @@ class Bassa:
 
     def get_compression_progress(self, id=None):
         """Get all download requests
+
         Args:
             id (int): compression id
-         Returns:
+
+        Returns:
             returns response as json
         """
         if id is None:
@@ -439,9 +490,11 @@ class Bassa:
 
     def send_file_from_path(self, id=None):
         """Get all download requests
+
         Args:
             id (int): id of the file
-         Returns:
+
+        Returns:
             returns response as json
         """
         if id is None:
